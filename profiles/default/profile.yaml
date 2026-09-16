@@ -1,0 +1,5 @@
+# Default profile: off. Rewriting responses is a service a route asks for explicitly; the shipped
+# configuration must not change traffic silently.
+#
+# "off" is quoted on purpose: a bare off in YAML 1.1 reads as false.
+mode: "off"

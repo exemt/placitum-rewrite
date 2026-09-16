@@ -1,0 +1,8 @@
+# Liveness probe. A single header group applies without touching Redis, and the rewrite section in
+# the answer tells a working pipeline apart from a bare allow that anything could send.
+mode: enforce
+groups:
+  - name: probe
+    default: true
+    headers:
+      - { op: set, name: X-WAF-Probe, value: rewrite }

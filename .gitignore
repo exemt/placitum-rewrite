@@ -1,0 +1,5 @@
+/rewrite
+/inspector
+/rewrite-probe
+/data/
+.env
