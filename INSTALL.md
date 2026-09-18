@@ -7,18 +7,18 @@ address and no service, and adding a copy touches neither the protection node no
 configuration. Usually `placitum-core` installs it.
 
 It works in the **response phase**, and that defines everything else: the response body does not
-travel over the bus but lies in the exchange, where the module put it.
+travel over the bus but lies in the buffer, where the module put it.
 
 ## What it needs
 
 | Component | Required | Why |
 | --- | --- | --- |
 | NATS | yes | inspector queue, audit, log, profile generations |
-| Exchange Redis | yes | the module puts the response body there; the inspector reads it and puts the rewritten copy under `<node>:<rid>:rsp:out` |
+| Buffer Redis | yes | the module puts the response body there; the inspector reads it and puts the rewritten copy under `<node>:<rid>:rsp:out` |
 | Controller | yes | sends profiles as generations (`policy/rewrite` channel) |
 | Action channel senders | no | groups that are off by default are turned on by their `mutate` requests |
 
-Without the exchange the inspector has nothing to rewrite: it receives the response body only by
+Without the buffer the inspector has nothing to rewrite: it receives the response body only by
 locator.
 
 ## Settings
@@ -26,7 +26,7 @@ locator.
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `NATS_URL` | `nats://127.0.0.1:4222` | bus |
-| `REDIS_URL` | from `inspector.conf` | exchange: response body and rewritten copy |
+| `REDIS_URL` | from `inspector.conf` | buffer: response body and rewritten copy |
 | `WAF_REWRITE_SUBJECT` | `waf.req.rewrite` | subscription; must match `subject=` in the inspector declaration |
 | `WAF_REWRITE_NAME` | `rewrite` | name in the inspector registry and the presence frame |
 | `WAF_REWRITE_QUEUE` | the name | bus queue: copies with one queue share the stream |
@@ -75,7 +75,7 @@ the loaded profiles and the worker count.
 - **The subject lives in two places**: `WAF_REWRITE_SUBJECT` of the process and `subject=` in the
   module's inspector declaration. If they differ, the module waits on one subject, the inspector
   listens on another, and the deadline policy fires on every response.
-- **The module and the inspector must use the same exchange.** The module puts the body into its
+- **The module and the inspector must use the same buffer.** The module puts the body into its
   Redis; an inspector reading another one answers that the object is missing, and the swap does not
   happen.
 - **Regular expressions run only here.** The inspector compiles them (RE2, linear time), the module

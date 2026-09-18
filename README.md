@@ -10,7 +10,7 @@ default or turned on by a neighbour's request (`mutate` or `skip` on the action 
 ## How it works
 
 Bytes do not travel over the bus. With `waf_hold response gate` the module holds the response and
-puts its body into the exchange (Redis). The inspector reads the object by locator, applies the
+puts its body into the buffer (Redis). The inspector reads the object by locator, applies the
 active groups and puts the rewritten copy under `<node>:<rid>:rsp:out`. The reply carries the object
 address, the header operations and the names of the applied groups; the module checks that the key
 prefix matches its request, takes the object, swaps the held body, fixes `Content-Length` and
@@ -108,10 +108,10 @@ route must capture the payload (`waf_capture frame body=`).
 - **Set a response body limit.** The module default is `1m block`: once the response phase is on, a
   page larger than a megabyte goes to the client as a denial.
 - **Give the phase a deadline.** The default is 50 ms, while half a megabyte has to be read from the
-  exchange, rewritten and written back. The `pass` policy keeps the page when the rewrite is late.
+  buffer, rewritten and written back. The `pass` policy keeps the page when the rewrite is late.
 - **No neighbours with `resume=require` in this phase**: the phase waits for them until the
   deadline, and the rewrite answer is lost with it.
-- **Compressed upstream responses are not rewritten**: the body snapshot asks the upstream for
+- **Compressed upstream responses are not rewritten**: the body capture asks the upstream for
   `Accept-Encoding: identity`.
 - **The archive and the preview keep the original**; the audit record marks the difference with a
   `rewrite` section.
