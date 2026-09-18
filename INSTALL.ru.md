@@ -29,7 +29,7 @@
 | `WAF_REWRITE_NAME` | `rewrite` | имя в реестре инспекторов и в кадре присутствия |
 | `WAF_REWRITE_QUEUE` | имя | очередь шины: копии с одной очередью делят поток |
 | `WAF_REWRITE_PROFILES` | `./profiles`; в образе `/app/profiles` | профили; поколение контроллера их перекрывает |
-| `WAF_REWRITE_DATA` | `<профили>.applied`; в образе `/var/lib/waf/rewrite` | куда раскатка кладёт применённое поколение |
+| `WAF_REWRITE_DATA` | `<профили>.applied`; в образе `/var/lib/waf/rewrite` | куда сохраняется применённое поколение |
 | `WAF_REWRITE_RELOAD_EVERY` | `1s` | как часто проверять каталог профилей |
 | `WAF_REWRITE_WORKERS` | число ядер | воркеры очереди |
 | `WAF_REWRITE_QUEUE_DEPTH`, `WAF_REWRITE_QUEUE_FULL`, `WAF_REWRITE_QUEUE_EXPAND` | `256`, `drop`, `off` | очередь и поведение при переполнении; то же через `inspector.conf` |
