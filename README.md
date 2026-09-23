@@ -103,17 +103,17 @@ route must capture the payload (`waf_capture frame body=`).
 "responseInspectors": [{ "name": "rewrite", "wave": 0, "timeoutMs": 2500 }]
 ```
 
-- **Capture the whole body and hold the response.** With `monitor` the swap never happens: the
+- Capture the whole body and hold the response. With `monitor` the swap never happens: the
   released response is already with the client, and the record shows `applied: false`.
-- **Set a response body limit.** The module default is `1m block`: once the response phase is on, a
+- Set a response body limit. The module default is `1m block`: once the response phase is on, a
   page larger than a megabyte goes to the client as a denial.
-- **Give the phase a deadline.** The default is 50 ms, while half a megabyte has to be read from the
+- Give the phase a deadline. The default is 50 ms, while half a megabyte has to be read from the
   buffer, rewritten and written back. The `pass` policy keeps the page when the rewrite is late.
-- **No neighbours with `resume=require` in this phase**: the phase waits for them until the
+- Keep neighbours with `resume=require` out of this phase: the phase waits for them until the
   deadline, and the rewrite answer is lost with it.
-- **Compressed upstream responses are not rewritten**: the body capture asks the upstream for
+- Compressed upstream responses are not rewritten: the body capture asks the upstream for
   `Accept-Encoding: identity`.
-- **The archive and the preview keep the original**; the audit record marks the difference with a
+- The archive and the preview keep the original; the audit record marks the difference with a
   `rewrite` section.
 
 ## In the audit
