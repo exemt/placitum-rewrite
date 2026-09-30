@@ -120,10 +120,11 @@ route must capture the payload (`waf_capture frame body=`).
 
 The `rewrite` section of every participant reaches the incident card, and the panel shows a note
 such as "response rewrite applied · mask, hdrs · 128B". `applied: false` is not a skip: that is how
-an observing profile and a losing order look (only one object is taken), and the groups next to it
-tell what would have been applied. An observing file profile (`mode: observe`) only mutes the
-rewrite: the response goes out untouched with `REWRITE_OBSERVE` (or `REWRITE_NOOP` when there was
-nothing to apply), and the `kind=inspector` event has `engine.passive: true` and `would_apply`.
+an observing profile looks, and so does a rewrite whose object the module did not take (it takes
+only one); the groups next to it tell what would have been applied. An observing file profile
+(`mode: observe`) only mutes the rewrite: the response goes out untouched with `REWRITE_OBSERVE` (or
+`REWRITE_NOOP` when there was nothing to apply), and the `kind=inspector` event has `engine.passive:
+true` and `would_apply`.
 
 The image health check, `rewrite-probe`, takes the real inspection path and checks that the
 `_probe` profile applied its header group, without Redis and without traffic.
